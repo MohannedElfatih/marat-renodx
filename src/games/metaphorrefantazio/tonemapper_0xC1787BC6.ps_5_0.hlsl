@@ -257,6 +257,8 @@ void main(float4 v0
   outputColor.rgb = starScale * r1.xyz + outputColor.rgb;
   outputColor.rgb = r0.xyz * r0.www + outputColor.rgb;
 
+  outputColor = applyUserTonemap(outputColor);
+
   o0.xyz = outputColor.rgb;
   o0.w = 1;
   return;

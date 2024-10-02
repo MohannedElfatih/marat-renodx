@@ -4,7 +4,9 @@
 
 #include "./shared.h"
 
-renodx::tonemap::Config getCommonConfig() {
+float3 applyUserTonemap(float3 untonemapped) {
+  float3 outputColor = untonemapped;
+
   renodx::tonemap::Config config = renodx::tonemap::config::Create();
 
   config.type = injectedData.toneMapType;
@@ -17,56 +19,33 @@ renodx::tonemap::Config getCommonConfig() {
   config.contrast = injectedData.colorGradeContrast;
   config.saturation = injectedData.colorGradeSaturation;
   config.reno_drt_dechroma = injectedData.colorGradeBlowout;
-
-  return config;
-}
-
-float3 applyUserTonemap(float3 untonemapped,
-                        bool forceUntonemappedType = false) {
-  float3 outputColor = untonemapped;
-
-  renodx::tonemap::Config config = getCommonConfig();
-
-  /* Foreground isn't tonemapped at all but we still want sliders to work */
-  if (forceUntonemappedType) {
-    config.type = 1.f;
-  }
-
-  if (injectedData.toneMapType == 0.f) {
-    outputColor = saturate(outputColor);
-  }
-
-  outputColor = renodx::tonemap::config::Apply(outputColor, config);
-
-  return outputColor;
-}
-
-float3 applyUserTonemapWithLUT(float3 untonemapped, SamplerState lut_sampler,
-                               Texture2D<float4> lut_texture) {
-  float3 outputColor;
-
-  // Mimic original LUT sampler code
-  outputColor = max(0, abs(renodx::color::bt709::from::BT2020(untonemapped)));
-
-  renodx::tonemap::Config config = getCommonConfig();
-
   config.hue_correction_type =
       renodx::tonemap::config::hue_correction_type::CUSTOM;
   config.hue_correction_color =
       lerp(outputColor, renodx::tonemap::Reinhard(outputColor),
            injectedData.toneMapHueCorrection);
 
+  outputColor = renodx::tonemap::config::Apply(outputColor, config);
+
+  outputColor *= injectedData.toneMapGameNits / injectedData.toneMapUINits;
+
+  return outputColor;
+}
+
+// Incoming color is already adjusted by renoDX
+float3 applyLUT(float3 tonemapped, SamplerState lut_sampler,
+                Texture2D<float4> lut_texture) {
+  float3 outputColor;
+
+  // Mimic original LUT sampler code
+  outputColor = max(0, abs(renodx::color::bt709::from::BT2020(tonemapped)));
+
   renodx::lut::Config lut_config = renodx::lut::config::Create(
       lut_sampler, injectedData.colorGradeLUTStrength, 0.f,
       renodx::lut::config::type::GAMMA_2_2,
       renodx::lut::config::type::GAMMA_2_2, 32);
 
-  if (injectedData.toneMapType == 0.f) {
-    outputColor = saturate(outputColor);
-  }
-
-  outputColor = renodx::tonemap::config::Apply(outputColor, config, lut_config,
-                                               lut_texture);
+  outputColor = renodx::lut::Sample(lut_texture, lut_config, outputColor);
 
   return outputColor;
 }
