@@ -9,6 +9,7 @@
 
 #define DEBUG_LEVEL_0
 
+#include <embed/0x1F993880.h>  // Final
 #include <embed/0xA7108284.h>  // Tonemapper 2
 #include <embed/0xC1787BC6.h>  // Tonemapper
 #include <embed/0xD8196629.h>  // LUT
@@ -24,9 +25,10 @@
 namespace {
 
 renodx::mods::shader::CustomShaders custom_shaders = {
-    CustomShaderEntry(0xD8196629),  // LUT
-    CustomShaderEntry(0xC1787BC6),  // Tonemapper
-    CustomShaderEntry(0xA7108284),  // Tonemapper 2
+    CustomShaderEntry(0xD8196629),      // LUT
+    CustomShaderEntry(0xC1787BC6),      // Tonemapper
+    CustomShaderEntry(0xA7108284),      // Tonemapper 2
+    CustomSwapchainShader(0x1F993880),  // Final
 };
 
 ShaderInjectData shader_injection;
@@ -78,7 +80,7 @@ renodx::utils::settings::Settings settings = {
         .key = "toneMapGammaCorrection",
         .binding = &shader_injection.toneMapGammaCorrection,
         .value_type = renodx::utils::settings::SettingValueType::BOOLEAN,
-        .default_value = 0.f,
+        .default_value = 1.f,
         .can_reset = false,
         .label = "Gamma Correction",
         .section = "Tone Mapping",
@@ -164,9 +166,9 @@ renodx::utils::settings::Settings settings = {
 void OnPresetOff() {
   renodx::utils::settings::UpdateSetting("toneMapType", 0.f);
   renodx::utils::settings::UpdateSetting("toneMapPeakNits", 203.f);
-  renodx::utils::settings::UpdateSetting("toneMapGameNits", 203.f);
-  renodx::utils::settings::UpdateSetting("toneMapUINits", 203.f);
-  renodx::utils::settings::UpdateSetting("toneMapGammaCorrection", 0.f);
+  renodx::utils::settings::UpdateSetting("toneMapGameNits", 150.f);
+  renodx::utils::settings::UpdateSetting("toneMapUINits", 120.f);
+  renodx::utils::settings::UpdateSetting("toneMapGammaCorrection", 1.f);
   renodx::utils::settings::UpdateSetting("toneMapHueCorrection", 1.f);
   renodx::utils::settings::UpdateSetting("colorGradeExposure", 1.f);
   renodx::utils::settings::UpdateSetting("colorGradeHighlights", 50.f);
@@ -181,8 +183,8 @@ void OnPresetOff() {
 
 // NOLINTBEGIN(readability-identifier-naming)
 
-extern "C" __declspec(dllexport) const char* NAME = "RenoDX DUMMY";
-extern "C" __declspec(dllexport) const char* DESCRIPTION = "RenoDX DUMMY";
+extern "C" __declspec(dllexport) const char* NAME = "RenoDX Metaphor";
+extern "C" __declspec(dllexport) const char* DESCRIPTION = "RenoDX Metaphor";
 
 // NOLINTEND(readability-identifier-naming)
 
