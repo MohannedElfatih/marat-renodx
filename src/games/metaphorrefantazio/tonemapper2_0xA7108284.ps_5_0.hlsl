@@ -81,6 +81,8 @@ void main(float4 v0
     r1.w = -adaptedLum + r1.w;
     r1.w = adaptedLumAdjust * r1.w + adaptedLum;
     r2.xyz = r2.yzw / r1.www;
+    ap1_aces_colored = r2.rgb;
+
     r1.w = dot(float3(0.439700812, 0.382978052, 0.1773348), r2.xyz);
     r3.y = dot(float3(0.0897923037, 0.813423157, 0.096761629), r2.xyz);
     r3.z = dot(float3(0.0175439864, 0.111544058, 0.870704114), r2.xyz);
@@ -150,7 +152,6 @@ void main(float4 v0
     r1.w = dot(r3.xyz, float3(0.272228718, 0.674081743, 0.0536895171));
     r3.xyz = r3.xyz + -r1.www;
     r3.xyz = r3.xyz * float3(0.959999979, 0.959999979, 0.959999979) + r1.www;
-    ap1_aces_colored = r3.rgb;
 
     r4.xy = float2(1, 0.180000007) + FilmBlackClip;
     r1.w = -FilmToe + r4.x;

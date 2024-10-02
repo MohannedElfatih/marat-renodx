@@ -4,6 +4,8 @@
 
 #include "./shared.h"
 
+renodx::tonemap::Config getCommonConfig() {}
+
 float3 applyUserTonemap(float3 untonemapped) {
   float3 outputColor = untonemapped;
 
@@ -35,17 +37,19 @@ float3 applyUserTonemap(float3 untonemapped) {
 // Incoming color is already adjusted by renoDX
 float3 applyLUT(float3 tonemapped, SamplerState lut_sampler,
                 Texture2D<float4> lut_texture) {
-  float3 outputColor;
+  float3 outputColor, sdrColor, lutOutput;
 
-  // Mimic original LUT sampler code
-  outputColor = max(0, abs(renodx::color::bt709::from::BT2020(tonemapped)));
+  sdrColor = saturate(tonemapped);
 
   renodx::lut::Config lut_config = renodx::lut::config::Create(
       lut_sampler, injectedData.colorGradeLUTStrength, 0.f,
       renodx::lut::config::type::GAMMA_2_2,
-      renodx::lut::config::type::GAMMA_2_2, 32);
+      renodx::lut::config::type::GAMMA_2_2, 32.f);
 
-  outputColor = renodx::lut::Sample(lut_texture, lut_config, outputColor);
+  lutOutput = renodx::lut::Sample(lut_texture, lut_config, sdrColor);
+
+  outputColor = renodx::tonemap::UpgradeToneMap(
+      tonemapped, sdrColor, lutOutput, injectedData.colorGradeLUTStrength);
 
   return outputColor;
 }
