@@ -11,6 +11,7 @@
 
 #include <embed/0x1F993880.h>  // Final
 #include <embed/0x70C6A8D7.h>  // Light Rays
+#include <embed/0x7EB16138.h>  // Persona selection background
 #include <embed/0x9FA3FE1B.h>  // Particles
 #include <embed/0xA177E041.h>  // Glow
 #include <embed/0xA3109C78.h>  // Bloom
@@ -19,6 +20,7 @@
 #include <embed/0xAC103037.h>  // Output
 #include <embed/0xC1787BC6.h>  // Tonemapper
 #include <embed/0xD8196629.h>  // LUT
+
 
 #include <deps/imgui/imgui.h>
 #include <include/reshade.hpp>
@@ -31,16 +33,17 @@
 namespace {
 
 renodx::mods::shader::CustomShaders custom_shaders = {
-    CustomShaderEntry(0xD8196629),      // LUT
-    CustomShaderEntry(0x70C6A8D7),      // Light Rays
-    CustomShaderEntry(0x9FA3FE1B),      // Particles
-    CustomShaderEntry(0xA177E041),      // Glow
-    CustomShaderEntry(0xA3109C78),      // Bloom
-    CustomShaderEntry(0xA5D96315),      // Glow
-    CustomShaderEntry(0xA7108284),      // Tonemapper
-    CustomShaderEntry(0xAC103037),      // Output
-    CustomShaderEntry(0xC1787BC6),      // Tonemapper
-    CustomSwapchainShader(0x1F993880),  // Final
+    CustomShaderEntry(0xD8196629),  // LUT
+    CustomShaderEntry(0x70C6A8D7),  // Light Rays
+    CustomShaderEntry(0x9FA3FE1B),  // Particles
+    CustomShaderEntry(0xA177E041),  // Glow
+    CustomShaderEntry(0xA3109C78),  // Bloom
+    CustomShaderEntry(0xA5D96315),  // Glow
+    CustomShaderEntry(0xA7108284),  // Tonemapper
+    CustomShaderEntry(0xAC103037),  // Output
+    CustomShaderEntry(0xC1787BC6),  // Tonemapper
+    CustomShaderEntry(0x7EB16138),  // Persona selection background
+    CustomShaderEntry(0x1F993880),  // Final
 };
 
 ShaderInjectData shader_injection;
@@ -71,7 +74,7 @@ renodx::utils::settings::Settings settings = {
     new renodx::utils::settings::Setting{
         .key = "toneMapGameNits",
         .binding = &shader_injection.toneMapGameNits,
-        .default_value = 150.f,
+        .default_value = 100.f,
         .label = "Game Brightness",
         .section = "Tone Mapping",
         .tooltip = "Sets the value of 100%% white in nits",
@@ -81,7 +84,7 @@ renodx::utils::settings::Settings settings = {
     new renodx::utils::settings::Setting{
         .key = "toneMapUINits",
         .binding = &shader_injection.toneMapUINits,
-        .default_value = 100.f,
+        .default_value = 80.f,
         .label = "UI Brightness",
         .section = "Tone Mapping",
         .tooltip = "Sets the brightness of UI and HUD elements in nits",
@@ -148,7 +151,7 @@ renodx::utils::settings::Settings settings = {
     new renodx::utils::settings::Setting{
         .key = "colorGradeSaturation",
         .binding = &shader_injection.colorGradeSaturation,
-        .default_value = 50.f,
+        .default_value = 40.f,
         .label = "Saturation",
         .section = "Color Grading",
         .max = 100.f,
