@@ -232,6 +232,7 @@ void main(float4 v0
   // o0.xyz = r0.xyz * r0.www + r1.xyz;
   outputColor.rgb = r0.xyz * r0.www + outputColor.rgb;
   outputColor = applyUserTonemap(outputColor);
+  // outputColor = scaleLuminance(outputColor);
 
   o0.xyz = outputColor.rgb;
   o0.w = 1;

@@ -23,15 +23,15 @@ cbuffer GFD_PSCONST_SYSTEM : register(b0) {
 
 // Values are probably scene specific, just for reference
 cbuffer GFD_PSCONST_HDR : register(b11) {
-  float middleGray : packoffset(c0);    // Around 10
-  float adaptedLum : packoffset(c0.y);  // Less than 1
+  float middleGray : packoffset(c0);   // Around 10
+  float adaptedLum : packoffset(c0.y); // Less than 1
   float bloomScale : packoffset(c0.z);
   float starScale : packoffset(c0.w);
-  float elapsedTime : packoffset(c1);         // Controls animations maybe?
-  float toonBloomScale : packoffset(c1.y);    // more than 1
-  float adaptedLumAdjust : packoffset(c1.z);  // Less than 1
-  float adaptedLumLimit : packoffset(c1.w);   // 0
-  float pbrIntensity : packoffset(c2);        // more than 1
+  float elapsedTime : packoffset(c1);        // Controls animations maybe?
+  float toonBloomScale : packoffset(c1.y);   // more than 1
+  float adaptedLumAdjust : packoffset(c1.z); // Less than 1
+  float adaptedLumLimit : packoffset(c1.w);  // 0
+  float pbrIntensity : packoffset(c2);       // more than 1
 }
 
 SamplerState opaueSampler_s : register(s0);
@@ -56,10 +56,10 @@ void main(float4 v0
   float4 fDest;
   float3 ap1_aces_colored, vanilla, outputColor;
 
-  r0.xyzw = bloomTexture.Sample(bloomSampler_s, v1.xy).xyzw;  // 1/4th of res
-  r1.xyz = starTexture.Sample(starSampler_s, v1.xy).xyz;      // 1/4th of res
+  r0.xyzw = bloomTexture.Sample(bloomSampler_s, v1.xy).xyzw; // 1/4th of res
+  r1.xyz = starTexture.Sample(starSampler_s, v1.xy).xyz;     // 1/4th of res
   r2.xyz =
-      opaueTexture.Sample(opaueSampler_s, v1.xy).xyz;  // Underexposed background
+      opaueTexture.Sample(opaueSampler_s, v1.xy).xyz; // Underexposed background
   ap1_aces_colored.rgb = r2.rgb;
   vanilla.rgb = r2.rgb;
 
@@ -89,7 +89,7 @@ void main(float4 v0
     // Adjusting Luminance? Lerps at the end I think
     r3.xyz = r2.xyz * r1.www;
     r3.xyz = adaptedLum * r3.xyz;
-    r1.w = max(adaptedLumLimit, r2.w);  // minimal limit? Why max?
+    r1.w = max(adaptedLumLimit, r2.w); // minimal limit? Why max?
     r1.w = 9.99999975e-05 + r1.w;
     r1.w = -adaptedLum + r1.w;
     r1.w = adaptedLumAdjust * r1.w + adaptedLum;
@@ -258,6 +258,7 @@ void main(float4 v0
   outputColor.rgb = r0.xyz * r0.www + outputColor.rgb;
 
   outputColor = applyUserTonemap(outputColor);
+  // outputColor = scaleLuminance(outputColor);
 
   o0.xyz = outputColor.rgb;
   o0.w = 1;

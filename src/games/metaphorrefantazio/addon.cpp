@@ -10,7 +10,13 @@
 #define DEBUG_LEVEL_0
 
 #include <embed/0x1F993880.h>  // Final
-#include <embed/0xA7108284.h>  // Tonemapper 2
+#include <embed/0x70C6A8D7.h>  // Light Rays
+#include <embed/0x9FA3FE1B.h>  // Particles
+#include <embed/0xA177E041.h>  // Glow
+#include <embed/0xA3109C78.h>  // Bloom
+#include <embed/0xA5D96315.h>  // Glow
+#include <embed/0xA7108284.h>  // Tonemapper
+#include <embed/0xAC103037.h>  // Output
 #include <embed/0xC1787BC6.h>  // Tonemapper
 #include <embed/0xD8196629.h>  // LUT
 
@@ -26,8 +32,14 @@ namespace {
 
 renodx::mods::shader::CustomShaders custom_shaders = {
     CustomShaderEntry(0xD8196629),      // LUT
+    CustomShaderEntry(0x70C6A8D7),      // Light Rays
+    CustomShaderEntry(0x9FA3FE1B),      // Particles
+    CustomShaderEntry(0xA177E041),      // Glow
+    CustomShaderEntry(0xA3109C78),      // Bloom
+    CustomShaderEntry(0xA5D96315),      // Glow
+    CustomShaderEntry(0xA7108284),      // Tonemapper
+    CustomShaderEntry(0xAC103037),      // Output
     CustomShaderEntry(0xC1787BC6),      // Tonemapper
-    CustomShaderEntry(0xA7108284),      // Tonemapper 2
     CustomSwapchainShader(0x1F993880),  // Final
 };
 

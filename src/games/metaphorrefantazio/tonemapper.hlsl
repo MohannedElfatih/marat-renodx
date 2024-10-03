@@ -29,10 +29,21 @@ float3 applyUserTonemap(float3 untonemapped) {
 
   outputColor = renodx::tonemap::config::Apply(outputColor, config);
 
-  outputColor *= injectedData.toneMapGameNits / injectedData.toneMapUINits;
-
   return outputColor;
 }
+
+float3 scaleLuminance(float3 color){
+    color *= injectedData.toneMapGameNits / injectedData.toneMapUINits;
+
+    return color;
+}
+
+float3 restoreLuminance(float3 color){
+    color /= injectedData.toneMapGameNits / injectedData.toneMapUINits;
+
+    return color;
+}
+
 
 // Incoming color is already adjusted by renoDX
 float3 applyLUT(float3 tonemapped, SamplerState lut_sampler,
