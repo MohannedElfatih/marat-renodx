@@ -78,7 +78,10 @@ void main(float4 v0
       r0.xyz = weight * r1.xyz + r0.xyz; */
     } else {
       // We run this code for others
+      // We restore color so LUT doesn't scale too
+      tonemapped = restoreLuminance(untonemapped);
       tonemapped = applyLUT(untonemapped, pointClampSampler_s, LUTTexture);
+      tonemapped = scaleLuminance(tonemapped);
     }
   } else {
     if (injectedData.toneMapType == 0.f) {
