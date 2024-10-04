@@ -21,7 +21,6 @@
 #include <embed/0xC1787BC6.h>  // Tonemapper
 #include <embed/0xD8196629.h>  // LUT
 
-
 #include <deps/imgui/imgui.h>
 #include <include/reshade.hpp>
 
@@ -175,6 +174,21 @@ renodx::utils::settings::Settings settings = {
         .tooltip = "Controls highlight desaturation due to overexposure.",
         .max = 100.f,
         .parse = [](float value) { return value * 0.01f; },
+    },
+    new renodx::utils::settings::Setting{
+        .value_type = renodx::utils::settings::SettingValueType::TEXT,
+        .label = "Special thanks to Marat & shortfuse for the support! Join the HDR Den discord for help!",
+        .section = "About",
+    },
+    new renodx::utils::settings::Setting{
+        .value_type = renodx::utils::settings::SettingValueType::BUTTON,
+        .label = "HDR Den Discord",
+        .section = "About",
+        .group = "button-line-1",
+        .tint = 0x5865F2,
+        .on_change = []() {
+          system("start https://discord.gg/5WZXDpmbpP");
+        },
     },
 };
 
