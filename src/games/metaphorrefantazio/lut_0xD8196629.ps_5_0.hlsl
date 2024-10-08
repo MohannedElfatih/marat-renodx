@@ -22,6 +22,7 @@ Texture2D<float4> gbuffer1Texture : register(t2);
 // 3Dmigoto declarations
 #define cmp -
 
+/* Just loading this shader clamps colors to BT709, no idea why */
 void main(float4 v0
           : SV_POSITION0, float2 v1
           : TEXCOORD0, out float4 o0
@@ -53,8 +54,7 @@ void main(float4 v0
       r1.rgb = renodx::color::gamma::EncodeSafe(r0.rgb);
 
       r1.xyz = min(float3(1, 1, 1), r1.xyz);
-      r1.yzw = r1.xyz * float3(0.96875, 0.96875, 0.96875) +
-               float3(0.015625, 0.015625, 0.015625);
+      r1.yzw = r1.xyz * float3(0.96875, 0.96875, 0.96875) + float3(0.015625, 0.015625, 0.015625);
       r1.w = r1.w * 32 + -0.5;
       r2.x = floor(r1.w);
       r1.w = -r2.x + r1.w;
@@ -99,8 +99,7 @@ void main(float4 v0
   // o0.xyzw = r0.xyzw;
 
   outputColor.rgb =
-      outputColor.rgb * float3(1.04999995, 1.04999995, 1.04999995) +
-      -untonemapped.xyz;
+      outputColor.rgb * float3(1.04999995, 1.04999995, 1.04999995) + -untonemapped.xyz;
   outputColor.rgb = weight * outputColor.xyz + untonemapped.xyz;
 
   o0.rgb = outputColor.rgb;

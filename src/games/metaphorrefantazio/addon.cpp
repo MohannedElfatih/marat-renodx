@@ -224,10 +224,10 @@ BOOL APIENTRY DllMain(HMODULE h_module, DWORD fdw_reason, LPVOID lpv_reserved) {
       renodx::mods::shader::force_pipeline_cloning = true;  // So the mod works with the toolkit
 
       // RGBA8_unorm
-      renodx::mods::swapchain::swap_chain_upgrade_targets.push_back({
+      /* renodx::mods::swapchain::swap_chain_upgrade_targets.push_back({
           .old_format = reshade::api::format::r8g8b8a8_unorm,
           .new_format = reshade::api::format::r16g16b16a16_float,
-      });
+      }); */
       // RGBA8_unorm_srgb
       renodx::mods::swapchain::swap_chain_upgrade_targets.push_back({
           .old_format = reshade::api::format::r8g8b8a8_unorm_srgb,
@@ -235,7 +235,7 @@ BOOL APIENTRY DllMain(HMODULE h_module, DWORD fdw_reason, LPVOID lpv_reserved) {
       });
 
       // RGB10A2_unorm
-      renodx::mods::swapchain::swap_chain_upgrade_targets.push_back({
+      /* renodx::mods::swapchain::swap_chain_upgrade_targets.push_back({
           .old_format = reshade::api::format::r10g10b10a2_unorm,
           .new_format = reshade::api::format::r16g16b16a16_float,
       });
@@ -256,7 +256,7 @@ BOOL APIENTRY DllMain(HMODULE h_module, DWORD fdw_reason, LPVOID lpv_reserved) {
       renodx::mods::swapchain::swap_chain_upgrade_targets.push_back({
           .old_format = reshade::api::format::b8g8r8a8_unorm_srgb,
           .new_format = reshade::api::format::r16g16b16a16_float,
-      });
+      }); */
 
       break;
     case DLL_PROCESS_DETACH:
